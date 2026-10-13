@@ -30,6 +30,4 @@ Aprendo haciendo: armo proyectos con datos reales, los documento paso a paso y l
 - Base de datos con PostgreSQL *(en desarrollo)*
 - Proyecto completo de datos *(próximamente)*
 
-## Hablemos
 
-Gracias por pasar por acá. Si tenés datos y una pregunta, querés colaborar en un proyecto o simplemente charlar sobre datos, escribime.
