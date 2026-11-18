@@ -1,0 +1,55 @@
+# ==========================================
+# GUÍA RÁPIDA: 10 PASOS DE LIMPIEZA DE DATOS EN PYTHON
+# ==========================================
+
+# 1. Importar librerías
+import pandas as pd
+import numpy as np
+
+# 2. Explorar datos
+# Cargar y revisar (se corrigió de pd.read_csv a pd.read_excel para abrir el archivo .xlsx)
+df = pd.read_excel('eph_tecnologia_microdatos.csv.xlsx')
+print(df.info())
+print(df.head())
+
+# 3. Estandarizar textos
+# Minúsculas y sin espacios extra (reemplaza 'ciudad' con una columna real de tu dataset si lo deseas)
+if 'ciudad' in df.columns:
+    df['ciudad'] = df['ciudad'].str.lower().str.strip()
+
+# 4. Eliminar duplicados
+# Eliminar filas repetidas
+df = df.drop_duplicates()
+
+# 5. Manejar valores faltantes
+# Rellenar con media o eliminar (reemplaza 'edad' e 'id_cliente' con columnas reales si lo deseas)
+if 'edad' in df.columns:
+    df['edad'] = df['edad'].fillna(df['edad'].mean())
+if 'id_cliente' in df.columns:
+    df = df.dropna(subset=['id_cliente'])
+
+# 6. Estandarizar valores numéricos
+# Convertir tipo de dato (ej. a entero)
+if 'ventas' in df.columns:
+    df['ventas'] = pd.to_numeric(df['ventas'], errors='coerce').fillna(0).astype(int)
+
+# 7. Filtrar datos incorrectos
+if 'edad' in df.columns:
+    df = df[df['edad'] > 0]
+
+# 8. Detectar y eliminar outliers
+# Usando rango intercuartílico (IQR) en la columna real 'ITF'
+if 'ITF' in df.columns:
+    Q1 = df['ITF'].quantile(0.25)
+    Q3 = df['ITF'].quantile(0.75)
+    IQR = Q3 - Q1
+    df = df[~((df['ITF'] < (Q1 - 1.5 * IQR)) | (df['ITF'] > (Q3 + 1.5 * IQR)))]
+
+# 9. Renombrar columnas
+# Nombres más claros
+if 'col_geo_v1' in df.columns:
+    df = df.rename(columns={'col_geo_v1': 'ubicacion', 'fech_reg': 'fecha_registro'})
+
+# 10. Guardar datos limpios
+# Exportar a nuevo CSV
+df.to_csv('datos_limpios.csv', index=False)
