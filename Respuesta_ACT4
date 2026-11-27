@@ -1,0 +1,55 @@
+¿Cómo adapto el código sin descartar lo anterior?
+
+Se conserva todo el proceso de limpieza y se agrega un filtro sobre la columna REGION. El resultado se guarda en un nuevo DataFrame (df_gba), sin sobrescribir la base original, y se vuelven a ejecutar los gráficos y las pruebas estadísticas usando ese DataFrame.
+
+
+import pandas as pd
+
+# Región a analizar: si cambia el pedido, se modifica solo esta línea
+REGION_OBJETIVO = "GBA"
+
+# Carga de la base ya limpia (no se repite la limpieza)
+df_clean = pd.read_csv("df_clean.csv")
+
+# Filtro de los hogares de la región pedida, sin alterar la base original
+mascara = df_clean["REGION"].astype(str).str.strip().str.upper() == REGION_OBJETIVO
+df_gba = df_clean[mascara].copy()
+
+# Control: verifica que el filtro haya encontrado datos
+print(f"Total país: {len(df_clean)} hogares | GBA: {len(df_gba)} hogares")
+if df_gba.empty:
+    print("Valores disponibles en REGION:", df_clean["REGION"].unique())
+
+# Exportación de la base filtrada
+df_gba.to_csv("df_gba.csv", index=False)
+
+En el EDA, cambiá el DataFrame que usan tus gráficos por df_gba. Como el cambio es simulado, no reemplaces los resultados de tu informe salvo que la profesora lo pida.
+
+2. GitHub Projects
+Entrá a tu repo Practica-Profesional-1, pestaña Projects, y elegí New project o Link a project (si ya creaste el tablero). 
+github
+Si es nuevo, usá la plantilla Board y llamalo Kanban - Brecha Digital EPH.
+Nombrá las columnas Por hacer, En proceso y Terminado.
+Con + Add item cargá las 5 tareas, en las mismas columnas que tu tablero, después del cambio a GBA.
+Para que la profe pueda verlo: menú del proyecto, Settings, sección "Danger zone", Visibility, Public. 
+github
+Copiá el enlace y sacá una captura (Windows + Shift + S). Guardala como tablero_kanban.png.
+3. Subir la captura y editar el README
+
+Captura: creá en tu PC una carpeta img con la imagen adentro. En la raíz del repo, Add file → Upload files, arrastrá la carpeta y tocá Commit changes.
+
+README: abrí README.md (raíz del repo), tocá el lápiz, pegá esto al final y hacé Commit changes:
+
+markdown
+## Gestión del proyecto (Kanban)
+
+El proyecto se organiza con un tablero Kanban de tres columnas: Por hacer, En proceso y Terminado.
+
+[Ver tablero en GitHub Projects](PEGAR_ENLACE_AQUI)
+
+![Tablero Kanban](img/tablero_kanban.png)
+
+### Cambio de planes: enfoque en el GBA
+
+- **Tarjetas modificadas:** el EDA bivariado permanece en "En proceso" con alcance GBA, y la limpieza y exportación de la base vuelve a "En proceso" para incorporar el filtro regional. El informe y el pitch actualizan su alcance.
+- **Adaptación del código:** se conserva la limpieza realizada y se filtra la columna REGION 
